@@ -1,1 +1,12 @@
 To clone: git clone 'urlHere'
+
+To see any modified changes or tracked changes: 
+	- git status ...This will list 'untracked files'
+
+
+To stage changes: git add files here or . for everything 
+
+To Commit changes: git commit -m 'message here' 
+
+
+git push to finish
