@@ -1,9 +1,9 @@
 import React from 'react';
-
 import './App.css';
+import Homepage from './components/homepage/homepage.component';
 
 function App() {
-  return <div>Hello World</div>;
+  return <Homepage />;
 }
 
 export default App;
