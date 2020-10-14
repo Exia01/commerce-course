@@ -9,6 +9,7 @@ function MenuItem({ title, imageUrl, size, history, linkUrl, match }) {
   return (
     <div
       className={`${size} menu-item`}
+      // current url
       onClick={() => history.push(`${match.url}${linkUrl}`)}
     >
       {/* We want image to style within the size of the containing div */}

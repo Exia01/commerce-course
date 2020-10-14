@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 
 const app = (
+  // Router component
   <BrowserRouter>
     <App />
   </BrowserRouter>
