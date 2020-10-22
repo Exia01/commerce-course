@@ -1,12 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { auth } from '../../firebase/firebase.utils';
+
 //This enables us to use the svg as a react component?
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
 import './header.styles.scss';
 
-export default function Header() {
+export default function Header({ currentUser }) {
+  function signOutClickHandler() {
+    auth.signOut();
+  }
+
   return (
     <div className='header'>
       <Link className='logo-container' to='/'>
@@ -19,6 +25,15 @@ export default function Header() {
         <Link className='option' to='/shop'>
           CONTACT
         </Link>
+        {currentUser ? (
+          <div className='option' onClick={signOutClickHandler}>
+            SIGN OUT
+          </div>
+        ) : (
+          <Link className='option' to='/signin'>
+            SIGN IN
+          </Link>
+        )}
       </div>
     </div>
   );
