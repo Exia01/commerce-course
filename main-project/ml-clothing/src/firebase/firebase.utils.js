@@ -31,6 +31,39 @@ export const signInWithGoogle = () => auth.signInWithPopup(provider)//takes in t
 
 export default firebase //in case we want the whole library
 
+
+//function
+export const createUserProfileDocument = async (userAuth, additionalData) => {// async helper func checks for valid obj
+    if (!userAuth) { //if no user obj
+        return
+    }
+    const userRef = firestore.doc(`users/${userAuth.uid}`); //Query reference ?
+    const snapshot = await userRef.get(); //getting snapshot from doc reference with docRef method
+
+    if (!snapshot.exists) { //meaning if we are getting an user back?
+        //if it doesn't exists then create it 
+        const { displayName, email, uid, providerData } = userAuth
+        const createdAt = new Date() //new date obj current date and current time
+
+        try {
+            //document reference method
+            await userRef.set({
+                displayName,
+                email,
+                createdAt,
+                uid,
+                providerData,
+                ...additionalData //passing along any additional data 
+            })
+        } catch (err) {
+            console.log(`Error Creating User: ${err.message}`)
+        }
+    }
+
+    return userRef //in case we want to do anything with that data
+}
+
+
 // Oct 2020 references
 // Auth documentation:https://firebase.google.com/docs/auth/web/google-signin
 // Google Auth documentation:https://developers.google.com/identity/protocols/oauth2/openid-connect#authenticationuriparameters
