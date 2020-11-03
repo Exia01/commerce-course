@@ -5,14 +5,9 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
 
-const app = (
-  // Router component
+ReactDOM.render(
   <BrowserRouter>
     <App />
-  </BrowserRouter>
-);
-
-ReactDOM.render(
-  <React.StrictMode>{app}</React.StrictMode>,
+  </BrowserRouter>,
   document.getElementById('root')
 );

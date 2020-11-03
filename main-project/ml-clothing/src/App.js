@@ -1,89 +1,65 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 // switch will ensure only one renders one route. Gives more control over code
-import Header from './components/header/header.component';
-import Homepage from './pages/homepage/homepage.component';
-import ShopPage from './pages/shop/shop.component';
-import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 import './App.css';
+
+import HomePage from './pages/homepage/homepage.component';
+import ShopPage from './pages/shop/shop.component';
+import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+import Header from './components/header/header.component';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 class App extends React.Component {
   constructor() {
     super();
+
     this.state = {
-      currentUser: null,
+      currentUser: null
     };
-  }
-  componentDidMount() {
-    this.getAuthUser();
   }
 
   unsubscribeFromAuth = null; //property class
+  //gives us back a function, when class closes the subscription
+  componentDidMount() {
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        //if the user exists meaning not null
+        const userRef = await createUserProfileDocument(userAuth);//using the returned userRef obj
 
-  getAuthUser = () => {
-    //gives us back a function, when class closes the subscription
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => { //async func
-      //subscription?
-      console.log('rendered');
+        //the moment our code runs it, it will still send us an snapshot
+        userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id, //identifies current user on the db
+              ...snapShot.data()//obj with all the properties of of the user
+            }
+          });
 
-      // this.setState({ currentUser: user });
-      createUserProfileDocument(user)
-    }); //takes func, param is what the user state is
-  };
+          console.log(this.state);
+        });
+      }
+      //if the user obj comes back null
+      this.setState({ currentUser: userAuth });
+    });
+  }
 
   componentWillUnmount() {
-    this.unsubscribeFromAuth(); //will unsub from the listener
+    this.unsubscribeFromAuth();//will unsub from the listener
   }
 
   render() {
-    // console.log(this.state.currentUser);
-    console.log('rendered');
     return (
-      <main>
+      <div>
         <Header currentUser={this.state.currentUser} />
         <Switch>
-          {/* route passes props only one component deep */}
-          <Route exact path='/' component={Homepage} />
+          <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={ShopPage} />
           <Route path='/signin' component={SignInAndSignUpPage} />
         </Switch>
-      </main>
+      </div>
     );
   }
 }
 
 export default App;
-
-// function App() {
-//   const [currentUser, setCurrentUser] = useState(null);
-
-//   useEffect(() => {
-//     getAuthUser();
-//     // auth.onAuthStateChanged((user) => {
-//     // setCurrentUser(user);
-//     // }); //takes func, param is what the user state is
-//   }, [currentUser]); // Only re-run the effect if count changes
-
-//   function getAuthUser() {
-//      auth.onAuthStateChanged((user) => { //subscription?
-//       console.log('rendered');
-//       setCurrentUser(user);
-//     }); //takes func, param is what the user state is
-//   }
-//   return (
-//     <main>
-//       <Header />
-//       <Switch>
-//         {/* route passes props only one component deep */}
-//         <Route exact path='/' component={Homepage} />
-//         <Route path='/shop' component={ShopPage} />
-//         <Route path='/signin' component={SignInAndSignUpPage} />
-//       </Switch>
-//     </main>
-//   );
-// }
-
-// export default App;

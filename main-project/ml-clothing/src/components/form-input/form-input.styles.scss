@@ -1,7 +1,6 @@
-$sub-color: grey; //sass variable, wherever we call it, similar to css variables
+$sub-color: grey;
 $main-color: black;
 
-//this will embed whole code block wherever its referenced
 @mixin shrinkLabel {
   top: -14px;
   font-size: 12px;
