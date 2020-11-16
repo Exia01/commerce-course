@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER } from './user.constants';
+import { UserActionTypes } from './user.types';
 
 const INITIAL_STATE = {
   //instanciating when when first fire the state
@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case SET_CURRENT_USER:
+    case UserActionTypes.SET_CURRENT_USER:
       return {
         ...state, //passing unchanged props in state
         currentUser: action.payload,
