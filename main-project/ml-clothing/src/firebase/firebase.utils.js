@@ -19,13 +19,16 @@ firebase.initializeApp(config);
 //configuring the firebase utility
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {// async helper func checks for valid obj
+  console.log('test');
   if (!userAuth) return;//if no user obj
 
   const userRef = firestore.doc(`users/${userAuth.uid}`); //Query reference, place we are querying --> simply represents the data
 
   const snapShot = await userRef.get();//getting snapshot from doc reference with docRef method
 
+  
   if (!snapShot.exists) {//meaning if this user doesn't exists
+  console.log('Hit Here')
     //if it doesn't exists then create it 
     const { displayName, email } = userAuth;
     const createdAt = new Date();//new date obj current date and current time

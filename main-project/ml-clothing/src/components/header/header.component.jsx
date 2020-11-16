@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'; //hoc lets us have access to redux
 
 import { auth } from '../../firebase/firebase.utils';
 //This enables us to use the svg as a react component?
@@ -32,4 +33,9 @@ const Header = ({ currentUser }) => (
   </div>
 );
 
-export default Header;
+const mapStateToProps = (state) => ({
+  //takes in root reducer state
+  currentUser: state.user.currentUser, //takes slice from state in store and get prop
+});
+
+export default connect(mapStateToProps)(Header); //connect then passes another component which wraps header
