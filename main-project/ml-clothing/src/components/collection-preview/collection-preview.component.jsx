@@ -11,9 +11,10 @@ export default function CollectionPreview({ title, items }) {
       <div className='preview'>
         {items
           .filter((item, idx) => idx < 4) //only 4 items can tell by index could use slice?
-          .map(({ id, ...otherItemProps }) => {
-            return <CollectionItem key={id} {...otherItemProps} />;
-          })}
+          .map((item) => (
+            //We want the whole item, no curly since we're not doing logic
+            <CollectionItem key={item.id} item={item} />
+          ))}
       </div>
     </div>
   );
