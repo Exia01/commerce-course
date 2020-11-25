@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'; //hoc lets us have access to redux
+import { createStructuredSelector } from 'reselect';
 
 import { auth } from '../../firebase/firebase.utils';
 //This enables us to use the svg as a react component?
@@ -9,6 +10,10 @@ import { ReactComponent as Logo } from '../../assets/crown.svg';
 import './header.styles.scss';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+
+//importing selectors
+import { selectCartHidden } from '../../redux/cart/cart.selectors';
+import { selectCurrentUser } from '../../redux/user/user.selector';
 
 const Header = ({ currentUser, hidden }) => (
   <div className='header'>
@@ -37,13 +42,12 @@ const Header = ({ currentUser, hidden }) => (
   </div>
 );
 
-const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
-  //destructuring nested objs above!!!!
-  //takes in root reducer state
-  currentUser, //takes slice from state in store and get prop
-  hidden,
+const mapStateToProps = createStructuredSelector({//this will handle distributing the state to the proper selector
+  currentUser: selectCurrentUser,//properties that we want
+  hidden: selectCartHidden,
 });
 
 export default connect(mapStateToProps)(Header); //connect then passes another component which wraps header
 
 // Destructuring nested Objs:https://medium.com/@pyrolistical/destructuring-nested-objects-9dabdd01a3b8
+// user: { currentUser }, cart: { hidden } }//how to destructure nested objs
