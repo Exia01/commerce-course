@@ -11,6 +11,8 @@ import {
 //css
 import './checkout.styles.scss';
 
+import CheckoutItem from '../../components/checkout-item/checkout-item.component';
+
 function CheckoutPage({ cartItems, total }) {
   return (
     <div className='checkout-page'>
@@ -31,7 +33,9 @@ function CheckoutPage({ cartItems, total }) {
           <span>Remove</span>
         </div>
       </div>
-      {cartItems.map((cartItem) => cartItem.name)}
+      {cartItems.map((cartItem) => (
+        <CheckoutItem key={cartItem.id} cartItem={cartItem} />
+      ))}
       <div className='total'>TOTAL: ${total}</div>
     </div>
   );
