@@ -23,4 +23,25 @@ export const addItemToCart = (cartItems, cartItemToAdd) => {
 
 
 
+//decrease qty if 1 then remove 
+export const removeItemFromCart = (cartItems, cartItemToRemove) => {
+    const existingCartItem = cartItems.find( //find the first item in array, loops through objs
+        cartItem => cartItem.id === cartItemToRemove.id
+    )
+    console.log(existingCartItem);
+
+
+    //if the qty is 1
+    if (existingCartItem.quantity === 1) {
+        //loop through to filter out the item to remove
+        return cartItems.filter(cartItem => cartItem.id !== cartItemToRemove.id)
+    }
+
+    //if qty is there is an item
+    return cartItems.map(cartItem =>
+        cartItem.id === cartItemToRemove.id ? //if we match the item
+            { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem) //if not return the exact same item
+}
+
+
 // More info on find:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
