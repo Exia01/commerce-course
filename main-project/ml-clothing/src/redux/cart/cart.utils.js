@@ -37,7 +37,7 @@ export const removeItemFromCart = (cartItems, cartItemToRemove) => {
         return cartItems.filter(cartItem => cartItem.id !== cartItemToRemove.id)
     }
 
-    //if qty is there is an item
+    //if qty is more than one
     return cartItems.map(cartItem =>
         cartItem.id === cartItemToRemove.id ? //if we match the item
             { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem) //if not return the exact same item
