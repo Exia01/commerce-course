@@ -27,7 +27,6 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {//
 
   
   if (!snapShot.exists) {//meaning if this user doesn't exists
-  console.log('Hit Here')
     //if it doesn't exists then create it 
     const { displayName, email } = userAuth;
     const createdAt = new Date();//new date obj current date and current time
