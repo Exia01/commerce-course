@@ -29,7 +29,7 @@ $main-color: black;
     }
 
     &:focus ~ .form-input-label {
-      @include shrinkLabel();
+      @include shrinkLabel(); //includes whole block. Reusable code block
     }
   }
 
