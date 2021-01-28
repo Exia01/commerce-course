@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch) => ({
   toggleCartHidden: () => dispatch(toggleCartHidden()), //named func, points to dispatch with that func that we imported
 });
 
-const mapStateToProps = createStructuredSelector({
+const mapStateToProps = createStructuredSelector({ 
   //this is an example of a redux selector usage
   itemCount: selectCartItemsCount, //takes whole state will slice later
 });

@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect';
 
-//gets state
+//gets state --> input selector
 const selectCart = (state) => state.cart; //slice one layer deep of just cart
 
-//passes into func
+//passes into func --> output selectors 
 export const selectCartItems = createSelector(
   [selectCart], //this is now a memoized selector
   (cart) => cart.cartItems //can pass multiple items
