@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'; //hoc lets us have access to redux
 import { createStructuredSelector } from 'reselect';
 
@@ -7,7 +6,14 @@ import { auth } from '../../firebase/firebase.utils';
 //This enables us to use the svg as a react component?
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
-import './header.styles.scss';
+//styled components
+import {
+  LogoContainer,
+  HeaderContainer,
+  OptionsContainer,
+  OptionLink,
+} from './header.styles';
+
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
@@ -16,34 +22,30 @@ import { selectCartHidden } from '../../redux/cart/cart.selectors';
 import { selectCurrentUser } from '../../redux/user/user.selector';
 
 const Header = ({ currentUser, hidden }) => (
-  <div className='header'>
-    <Link className='logo-container' to='/'>
+  <HeaderContainer>
+    <LogoContainer to='/'>
       <Logo className='logo' />
-    </Link>
-    <div className='options'>
-      <Link className='option' to='/shop'>
-        SHOP
-      </Link>
-      <Link className='option' to='/shop'>
-        CONTACT
-      </Link>
+    </LogoContainer>
+    <OptionsContainer>
+      <OptionLink to='/shop'>SHOP</OptionLink>
+      <OptionLink to='/shop'>CONTACT</OptionLink>
       {currentUser ? (
-        <div className='option' onClick={() => auth.signOut()}>
+        // Will will render the link as a div
+        <OptionLink as='div' onClick={() => auth.signOut()}>
           SIGN OUT
-        </div>
+        </OptionLink>
       ) : (
-        <Link className='option' to='/signin'>
-          SIGN IN
-        </Link>
+        <OptionLink to='/signin'>SIGN IN</OptionLink>
       )}
       <CartIcon />
-    </div>
+    </OptionsContainer>
     {hidden ? null : <CartDropdown />}
-  </div>
+  </HeaderContainer>
 );
 
-const mapStateToProps = createStructuredSelector({//this will handle distributing the state to the proper selector
-  currentUser: selectCurrentUser,//properties that we want no need to pass state. 
+const mapStateToProps = createStructuredSelector({
+  //this will handle distributing the state to the proper selector
+  currentUser: selectCurrentUser, //properties that we want no need to pass state.
   hidden: selectCartHidden,
 });
 
