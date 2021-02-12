@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 // switch will ensure only one renders one route. Gives more control over code
 import { connect } from 'react-redux'; //connects to the redux store
@@ -19,20 +19,9 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { selectCurrentUser } from './redux/user/user.selector';
 import { createStructuredSelector } from 'reselect';
 
-class App extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      currentUser: null,
-    };
-  }
-
-  unsubscribeFromAuth = null; //property class
-  //gives us back a function, when class closes the subscription
-  componentDidMount() {
-    const { setCurrentUser } = this.props;
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+function App({ setCurrentUser, currentUser }) {
+  useEffect(() => {
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         //if the user exists meaning not null
         const userRef = await createUserProfileDocument(userAuth); //using the returned
@@ -49,32 +38,33 @@ class App extends React.Component {
       //if the user obj comes back null
       setCurrentUser(userAuth);
     });
-  }
+    console.log('subbed');
 
-  componentWillUnmount() {
-    this.unsubscribeFromAuth(); //will unsub from the listener
-  }
-
-  render() {
-    const { currentUser } = this.props;
-    return (
-      <div>
-        <Header />
-        <Switch>
-          <Route exact path='/' component={HomePage} />
-          <Route path='/shop' component={ShopPage} />
-          <Route path='/checkout' component={CheckoutPage} />
-          <Route
-            exact
-            path='/signin'
-            render={() =>
-              currentUser ? <Redirect to='/' /> : <SignInAndSignUpPage />
-            }
-          />
-        </Switch>
-      </div>
-    );
-  }
+    //cleanup func
+    return () => {
+      unsubscribeFromAuth();
+      console.log('Unsub');
+    };
+  }, [setCurrentUser]); //we could pass an empty arr to only run at mounting the component
+  //property class
+  //gives us back a function, when class closes the subscription
+  return (
+    <div>
+      <Header />
+      <Switch>
+        <Route exact path='/' component={HomePage} />
+        <Route path='/shop' component={ShopPage} />
+        <Route path='/checkout' component={CheckoutPage} />
+        <Route
+          exact
+          path='/signin'
+          render={() =>
+            currentUser ? <Redirect to='/' /> : <SignInAndSignUpPage />
+          }
+        />
+      </Switch>
+    </div>
+  );
 }
 
 const mapStateToProps = createStructuredSelector({
